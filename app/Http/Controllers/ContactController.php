@@ -9,10 +9,17 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    public function create(ContactRequest $request)
+    public function create(Request $request)
     {
         $id = auth()->id();
-        $validated_request = $request->validated();
+        $validated_request = $request->validate([
+            'name' => 'required|max:25',
+            'email' => 'required|email:rfc,dns|max:50',
+            'email' => 'unique:contacts,email,NULL,id,user_id,' . $id,
+            'phone' => 'regex:/^(\+|0)[0-9]+$/',
+            'phone' => 'required|min:3|max:20',
+            'phone' => 'unique:contacts,phone,NULL,id,user_id,' . $id, 
+        ]);
         $validated_request['user_id'] = $id;
 
         Contact::create($validated_request);

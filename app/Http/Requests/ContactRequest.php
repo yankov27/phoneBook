@@ -26,6 +26,7 @@ class ContactRequest extends FormRequest
         return [
             'name' => 'required|max:25',
             'email' => 'required|email:rfc,dns|unique:contacts,email|max:50',
+            'email' => 'unique:users,email,NULL,id,user_id,1',
             'phone' => 'regex:/^(\+|0)[0-9]+$/',
             'phone' => 'required|unique:contacts,phone|min:3|max:20'        
         ];
